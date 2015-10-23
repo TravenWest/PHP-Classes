@@ -1,7 +1,7 @@
 <?php
 
 /**  
- *   Project:    XML Phonebook
+ *   Project:    LearnPHP CMS
  *   Package:    Database.php
  *   Authors:    Traven, Truvis
  *   Version:    1.0.0
@@ -21,13 +21,22 @@ class PDO
       *   should be protected and never shared outside of the class.
       *
       *   Variables:  String
-      *   Returns:    MNySQL database  login information
+      *   Returns:    MNySQL database login information
       */
      protected $Hostname = '';
      protected $Database = '';
      protected $Username = '';
      protected $Password = '';
      
+     
+     /**
+      *   I am going to store the class instance as a variable for easier use
+      *   and to create SQL queries and functions. This should allow for the 
+      *   best security and prepared statements.
+      *   
+      *   Variables:  Instance
+      *   Returns:    The database/PDO class
+      */
      protected $PDO;
      
      /**
@@ -37,6 +46,14 @@ class PDO
       *   
       */
      protected $error;
+     
+     /**
+      *   We are going to store the SQL statement as an object of the class so
+      *   we can protect it from outside classes if another class was to be
+      *   exploitable or vulnerable in the future. This is one of the safest
+      *   ways to handle SQL queries for "future proofing".
+      */
+     protected $statement;
 
      
      /**
@@ -69,10 +86,77 @@ class PDO
           {
                $this->PDO = new PDO($DNS, $this->Username, $this->Password, $options);
           }
-          // Catch any errors
+
           catch(PDOException $error)
           {
                $this->error = $error->getMessage();
           }
+     }
+     
+     
+     /**
+      *   I'm going to make our SQL query default to being a prepared statement
+      *   over allowing our developing to cause SQL injections. This is a major
+      *   security enhancing idea. In other words, all SQL statements are going
+      *   to be prepared to remove the worry of hackers doing SQL injections.
+      *   
+      *   Variables:  SQL statement 
+      *   Returns:    Prepared sql statement
+      */
+     public function query($query)
+     {
+          $this->statement = $this->PDO->prepare($query);
+     }
+     
+     
+     /**
+      *   This may be the most complex piece of the Database class that will
+      *   be used in all SQL statements. We are preparing the queries even
+      *   further to stop all exploition. We are using a switch statement to
+      *   allow the code/query choose the type of data which is going to be
+      *   returned to us from the four common types.
+      *   
+      *   Variables:  Types
+      *   Returns:    Binded SQL results
+      */
+     public function bind($param, $value, $type = null)
+     {
+          if (is_null($type)) 
+               {
+                    switch (true) 
+                    {
+                         case is_int($value):
+                         $type = PDO::PARAM_INT;
+                         break;
+                         
+                         case is_bool($value):
+                         $type = PDO::PARAM_BOOL;
+                         break;
+                         
+                         case is_null($value):
+                         $type = PDO::PARAM_NULL;
+                         break;
+                         
+                    default:
+                    $type = PDO::PARAM_STR;
+                    }
+               }
+          
+          $this->statement->bindValue($param, $value, $type);
+     
+     }
+     
+     /**
+      *   Now I can can create our function to execute our prepared the SQL
+      *   statements that we write in the web application. All of the work 
+      *   to prepare the statements is done, and now we need to actually
+      *   execute and return our results which we requested.
+      *   
+      *   Variables:  
+      *   Returns:    The query results
+      */
+     public function execute()
+     {
+          return $this->statement->execute();
      }
 }
