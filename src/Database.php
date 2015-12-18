@@ -12,7 +12,7 @@
  *   they are executed. This is the core class to the web application!
  */
  
-class PDO
+class Database
 {
      
      /**
