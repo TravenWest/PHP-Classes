@@ -4,7 +4,7 @@
  *   Project:    XML Phonebook
  *   Package:    Application.php
  *   Authors:    Traven, Truvis
- *   Version:    1.0.0
+ *   Version:    1.0.4
  *   License:    BSD Clause 3, New or Revisted License
  *   
  *   This class is going to handle generalized functions which the full web 
@@ -24,8 +24,8 @@ class Application
      *   Variable:  String
      *   Returns:   Version Number and ID
      */
-    public static $version   = "1.0.0";
-    public static $versionID = "01000003";  //  AABBCC0D (7 = stable, 5 = beta, 3 = alpha)
+    public static $version   = "1.0.4";
+    public static $versionID = "01000004";  //  AABBCC0D (7 = stable, 5 = beta, 3 = alpha)
     
     
     /**
