@@ -4,7 +4,7 @@
  *   Project:    LearnPHP CMS
  *   Package:    Database.php
  *   Authors:    Traven, Truvis
- *   Version:    1.0.0
+ *   Version:    1.0.4
  *   License:    BSD Clause 3, New or Revisted License
  *   
  *   This class is going to hadle all database connections and queries for the
@@ -152,7 +152,6 @@ class PDO
       *   to prepare the statements is done, and now we need to actually
       *   execute and return our results which we requested.
       *   
-      *   Variables:  
       *   Returns:    The query results
       */
      public function execute()
